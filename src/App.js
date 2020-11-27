@@ -30,7 +30,6 @@ this.unsubscribeFromAuth = auth.onAuthStateChanged( async userAuth => {
           ...snapshot.data()
         }
       });
-      console.log(this.state)
     })
   }
   this.setState({currentUser:userAuth})
