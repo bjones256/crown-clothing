@@ -69,7 +69,7 @@ handleChange = (e) => {
                     />
                     <div className='buttons'>
                     <CustomButton type='submit' value="Submit Form">Sign In</CustomButton>
-                    <CustomButton onClick={signInWithGoogle} isGoogleSignIn >Sign In With Google</CustomButton>
+                    <CustomButton onClick={signInWithGoogle} isGoogleSignIn type='button'>Sign In With Google</CustomButton>
                     </div>
                 </form>
             </div>
