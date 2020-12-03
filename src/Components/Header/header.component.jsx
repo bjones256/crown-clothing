@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import './header.styles.scss';
+// import './header.styles.scss'; no longer need the scss files becuase I'm now using styled-components
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink} from './header.styles'
+
+
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 import CartIcon from '../CartIcon/cart-icon.component';
 import CartDropdown from '../CartDropdown/cart-dropdown.component';
@@ -12,29 +15,29 @@ import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 const Header = ({currentUser, hidden}) => (
-    <div className='header'>
-        <Link to='/' className='logo-container'>
+    <HeaderContainer>
+        <LogoContainer to='/'>
             <Logo className='logo'/>
-        </Link>
-        <div className='options'>
-        <Link to='/shop' className='option'>
+        </LogoContainer>
+        <OptionsContainer>
+        <OptionLink to='/shop'>
             Shop
-        </Link>
-        <Link to='/shop' className='option'>
+        </OptionLink>
+        <OptionLink to='/shop'>
             Contact
-        </Link>
+        </OptionLink>
         {
             currentUser ?
-            <div className='option' onClick={() => auth.signOut()}>
+            <OptionLink as='div' onClick={() => auth.signOut()}>
                 Sign Out
-            </div>
+            </OptionLink>
             :
-            <Link className='option' to='/signin'>Sign In</Link> 
+            <OptionLink to='/signin'>Sign In</OptionLink> 
         }
         <CartIcon/>
-        </div>
+        </OptionsContainer>
         {hidden ? null :<CartDropdown/>}
-    </div>
+    </HeaderContainer>
 )
 
 const mapStateToProps = createStructuredSelector({
