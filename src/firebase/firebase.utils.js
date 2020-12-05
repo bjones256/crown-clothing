@@ -17,7 +17,7 @@ const config = {
 
     const userRef = firestore.doc(`users/${userAuth.uid}`)
 
-    const snapShot = await userRef.get()
+    const snapShot = await userRef.get();
 
     if(!snapShot.exists){
       const { displayName, email} = userAuth;
@@ -37,6 +37,37 @@ const config = {
 
     return userRef;
   }
+
+
+  // This was used to batch add collections and items into firebase from static file
+  // export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  //   const collectionRef = firestore.collection(collectionKey);
+
+  //   const batch = firestore.batch();
+  //   objectsToAdd.forEach( obj => {
+  //     const newDocRef = collectionRef.doc();
+  //     batch.set(newDocRef, obj)
+  //   });
+
+  //   return await batch.commit()
+
+  // }
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+  const transformedCollection = collections.docs.map( doc => {
+    const { title, items } = doc.data();
+    return {
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+      title,
+      items
+    }
+  });
+  return transformedCollection.reduce( (accumulator, collection ) => {
+    accumulator[collection.title.toLowerCase()] = collection;
+    return accumulator;
+  }, {})
+}
 
   firebase.initializeApp(config)
 
