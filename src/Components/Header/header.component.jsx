@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 // import './header.styles.scss'; no longer need the scss files becuase I'm now using styled-components
-import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink} from './header.styles'
+import { HeaderContainer, LogoContainer, OptionsContainer, OptionLink} from './header.styles';
 
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
@@ -13,8 +13,9 @@ import CartDropdown from '../CartDropdown/cart-dropdown.component';
 import { auth } from '../../firebase/firebase.utils';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { signOutStart } from '../../redux/user/user.actions';
 
-const Header = ({currentUser, hidden}) => (
+const Header = ({currentUser, hidden, signOutStart}) => (
     <HeaderContainer>
         <LogoContainer to='/'>
             <Logo className='logo'/>
@@ -28,7 +29,7 @@ const Header = ({currentUser, hidden}) => (
         </OptionLink>
         {
             currentUser ?
-            <OptionLink onClick={() => auth.signOut()}>
+            <OptionLink as='div' onClick={signOutStart}>
                 Sign Out
             </OptionLink>
             :
@@ -45,4 +46,8 @@ const mapStateToProps = createStructuredSelector({
     hidden: selectCartHidden
 })
 
-export default connect(mapStateToProps)(Header)
+const mapDispatchToProps = dispatch => ({
+    signOutStart: () => dispatch(signOutStart())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
