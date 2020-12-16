@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -13,20 +13,35 @@ import SignInAndUp from './Components/SignInAndUp/sign-in-and-up.component';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import { checkUserSession } from './redux/user/user.actions';
 
-class App extends React.Component{
+// class App extends React.Component{
+const App = ({ checkUserSession, currentUser }) => {
 
-unsubscribeFromAuth = null;
+  useEffect(() => {
+    checkUserSession()
+  },[checkUserSession])
 
-  componentDidMount(){
-    const { checkUserSession } = this.props;
-    checkUserSession();
-  }
 
-  componentWillUnmount(){
-    this.unsubscribeFromAuth()
-  }
+  // below is an example of a cleanup function that fires on unmount. I don't think it actually doing anything here
+  useEffect(() => {
+    console.log('Im subscribing')
+    const unsubscribeFromAuth = () => { console.log("Im' unsubscribed");}
+    return () => {
+      unsubscribeFromAuth()
+    }
+  },[])
 
-  render(){
+// unsubscribeFromAuth = null;
+
+  // componentDidMount(){
+  //   const { checkUserSession } = this.props;
+  //   checkUserSession();
+  // }
+
+  // componentWillUnmount(){
+  //   this.unsubscribeFromAuth()
+  // }
+
+  // render(){
   return (
     <div className="App">
       <Header/>
@@ -34,12 +49,13 @@ unsubscribeFromAuth = null;
         <Route exact path='/' component={HomePage}/>
         <Route path='/shop' component={ShopPage}/>
         <Route exact path='/checkout' component={CheckoutPage}/>
-        <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/'/>):(<SignInAndUp/>)}/>
+        {/* <Route exact path='/signin' render={() => this.props.currentUser ? (<Redirect to='/'/>):(<SignInAndUp/>)}/> */}
+        <Route exact path='/signin' render={() => currentUser ? (<Redirect to='/'/>):(<SignInAndUp/>)}/>
       </Switch>
     </div>
   );
   }
-}
+// }
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
